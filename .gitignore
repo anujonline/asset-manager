@@ -21,3 +21,4 @@ error-screenshots/
 webpack.generated.js
 /db-file.mv.db
 /db-file.trace.db
+/src/main/dev-bundle

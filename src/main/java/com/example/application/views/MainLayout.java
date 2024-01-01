@@ -2,10 +2,7 @@ package com.example.application.views;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.html.Footer;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
@@ -48,15 +45,15 @@ public class MainLayout extends AppLayout {
     }
 
     private SideNav createNavigation() {
-        
+
         SideNav nav = new SideNav();
         var admin = new SideNavItem("Admin");
-        admin.addItem(new SideNavItem("Add Account", AddAccountView.class));
-        admin.addItem(new SideNavItem("Add Currency", AddCurrency.class));
+//        admin.addItem(new SideNavItem("Add Account", AddAccountView.class));
+//        admin.addItem(new SideNavItem("Add Currency", AddCurrency.class));
+        admin.addItem(new SideNavItem("Create Account", CreateAccount.class));
 
         var user = new SideNavItem("User");
         user.addItem(new SideNavItem("Add Asset", AddAssetView.class, LineAwesomeIcon.ADDRESS_BOOK.create()));
-        user.addItem(new SideNavItem("Asset Grid", AssetGridView.class, LineAwesomeIcon.ACQUISITIONS_INCORPORATED.create()));
         user.addItem(new SideNavItem("View Assets", ViewAssets.class, LineAwesomeIcon.WATER_SOLID.create()));
         user.addItem(new SideNavItem("Visualize Assets", GraphicViewAsset.class, LineAwesomeIcon.DEV.create()));
         user.addItem(new SideNavItem("Visualize Assets Without currency conversion", GraphicViewAssetOwnCurrency.class, LineAwesomeIcon.DEV.create()));

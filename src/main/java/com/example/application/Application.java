@@ -6,6 +6,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @Theme(value = "cash-register", variant = Lumo.LIGHT)
+@EnableCaching
 public class Application implements AppShellConfigurator {
 
     public static void main(String[] args) {

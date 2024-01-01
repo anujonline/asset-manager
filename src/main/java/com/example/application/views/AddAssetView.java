@@ -27,9 +27,7 @@ public class AddAssetView extends VerticalLayout {
 
     public AddAssetView(ViewService viewService) {
         amount.setPrefixComponent(amountPrefix);
-        accountComboBox.addValueChangeListener(c -> {
-            amountPrefix.setText(CurrencySign.valueOf(c.getValue().getCurrency().getDisplayName()).getSymbol());
-        });
+
         accountComboBox.setAllowCustomValue(false);
         accountComboBox.setItems(viewService.accounts().stream().sorted(Comparator.comparing(Account::getDisplayName)).toList());
 

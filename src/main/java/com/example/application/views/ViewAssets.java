@@ -10,6 +10,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.notification.Notification;
@@ -35,6 +36,10 @@ public class ViewAssets extends VerticalLayout {
     private static final DecimalFormat formatter = new DecimalFormat("#,###.00");
 
     public ViewAssets(ViewService viewService) {
+        var anchor = new Anchor();
+        anchor.setHref("https://www.exchangerate-api.com");
+        anchor.setText("Rates By Exchange Rate API");
+        add(anchor);
         scrollIntoView();
         grid.setSizeFull();
         var assets = viewService.assets().stream().sorted(Comparator.comparing(o -> o.getAccount().getDisplayName())).toList();

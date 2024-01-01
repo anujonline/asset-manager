@@ -57,7 +57,7 @@ public class GraphicViewAssetOwnCurrency extends VerticalLayout {
         var list = new ArrayList<Series<Double>>();
         userMonthSums
                 .forEach((s, monthDoubleMap) -> {
-                    Series<Double> tSeries = new Series<>("%s %s %s".formatted(s.getDisplayName(), s.getLabel(), CurrencySign.valueOf(s.getCurrency().getDisplayName()).getSymbol()), monthDoubleMap.values().toArray(Double[]::new));
+                    Series<Double> tSeries = new Series<>("%s %s".formatted(s.getDisplayName(), s.getLabel()), monthDoubleMap.values().toArray(Double[]::new));
                     list.add(tSeries);
                 });
         apexChartsBuilder

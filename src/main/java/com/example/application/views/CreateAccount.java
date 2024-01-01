@@ -13,39 +13,36 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
-@Route(value = "add-account", layout = MainLayout.class)
-@PageTitle("Add Account")
-public class AddAccountView extends VerticalLayout {
-    private final TextField accountName = new TextField("Account Name");
-    private final TextField label = new TextField("Label");
-    private final ComboBox<Currency> accountCurrency = new ComboBox<>("Account currency");
-    private final Button save = new Button("Save");
-    private final Grid<Account> accountGrid = new Grid<>(Account.class, false);
+@Route(value = "create-account", layout = MainLayout.class)
+public class CreateAccount extends VerticalLayout {
     private final Notification error = new Notification("Required fields are empty", 5000, Notification.Position.TOP_STRETCH);
     private final Notification success = new Notification("Data saved", 5000, Notification.Position.TOP_STRETCH);
+    private final Grid<Account> accountGrid = new Grid<>(Account.class, false);
+    public CreateAccount(ViewService viewService) {
+        var accountName = new TextField("Account name");
+        accountName.setHelperText("Account name could be bank name, stock app name etc.");
+        var label = new TextField("Label");
+        label.setHelperText("label could be, saving, current, stocks etc.");
 
-    public AddAccountView(ViewService viewService) {
-        accountName.setRequired(true);
-        label.setRequired(true);
-        accountCurrency.setRequired(true);
-        setSizeFull();
-        add(accountName, accountCurrency, label, save, accountGrid);
-        accountCurrency.setItems(viewService.currencies());
-        accountCurrency.setItemLabelGenerator(Currency::getDisplayName);
+
+        var currencyDropdown = getCurrencyDropdown(viewService);
+
+        add(accountName, label);
+        var save = new Button("Save");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener(clickEvent -> {
-            if (isBlank(accountName.getValue()) || isBlank(label.getValue()) || Objects.isNull(accountCurrency.getValue())) {
+            if (isBlank(accountName.getValue()) || isBlank(label.getValue()) || Objects.isNull(currencyDropdown.getValue())) {
                 error.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 error.open();
             } else {
-                var account = new Account().setDisplayName(accountName.getValue().toUpperCase()).setLabel(label.getValue().toUpperCase()).setCurrency(accountCurrency.getValue());
+                var account = new Account().setDisplayName(accountName.getValue().toUpperCase()).setLabel(label.getValue().toUpperCase()).setCurrency(new Currency().setDisplayName(currencyDropdown.getValue()));
                 viewService.addAccount(account);
                 UI.getCurrent().access(() -> {
                     remove(accountGrid);
@@ -53,13 +50,26 @@ public class AddAccountView extends VerticalLayout {
                     add(accountGrid);
                     accountName.clear();
                     label.clear();
-                    accountCurrency.clear();
+                    currencyDropdown.clear();
                 });
                 success.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 success.open();
             }
         });
-        addGrid(viewService);
+        add(currencyDropdown, save);
+    }
+
+    private static ComboBox<String> getCurrencyDropdown(ViewService viewService) {
+        var currencyDropdown = new ComboBox<String>("Select Currency");
+        currencyDropdown.setItemLabelGenerator(String::toString);
+        try {
+            var currencyNames = viewService.fetchCurrencyNames();
+            currencyDropdown.setItems(currencyNames);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return currencyDropdown;
     }
 
     private void addGrid(ViewService viewService) {
